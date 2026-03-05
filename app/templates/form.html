@@ -1,0 +1,50 @@
+<form action="/recommend" method="post" class="form">
+
+    <div class="form-row">
+        <label>Odor Type</label>
+        <input type="text" name="odor_type" placeholder="diesel, citrus, pine..." />
+    </div>
+
+    <div class="form-row">
+        <label>Family</label>
+        <input type="text" name="family_type" placeholder="herbal, fruity..." />
+    </div>
+
+    <div class="form-row">
+        <label>Tags</label>
+        <input type="text" name="tags" placeholder="pine, skunk..." />
+    </div>
+
+    <div class="form-row">
+        <label>Description</label>
+        <textarea name="odor_description"></textarea>
+    </div>
+
+    <div class="form-row">
+        <label>Intensity</label>
+        <input type="number" name="intensity_1_10" min="0" max="10" />
+    </div>
+
+    <div class="form-row">
+        <label>Cannabis Forward</label>
+        <input type="number" name="cannabis_forward" min="0" max="10" />
+    </div>
+
+    <div class="form-row">
+        <label>Fruity Forward</label>
+        <input type="number" name="fruity_forward" min="0" max="10" />
+    </div>
+
+    <div class="form-row">
+        <label>Dessert Forward</label>
+        <input type="number" name="dessert_forward" min="0" max="10" />
+    </div>
+
+    <!-- SUBMIT BUTTON -->
+    <div class="form-actions">
+        <button type="submit" class="btn primary">
+            Submit
+        </button>
+    </div>
+
+</form>

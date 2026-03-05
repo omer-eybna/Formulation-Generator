@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Formulation Generator</title>
+  <link rel="stylesheet" href="/static/styles.css?v=20260305" />
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="logo-dot"></div>
+        <div class="brand">
+          <div class="brand-title">Eybna Formulate AI</div>
+          <div class="brand-subtitle">Formulation Intelligence Engine</div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <a class="toplink" href="/">Generator</a>
+        <span class="top-sep">•</span>
+        <span class="top-muted">Local</span>
+      </div>
+    </header>
+
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+
+  <!-- Cache-busted JS include (even if empty) -->
+  <script src="/static/app.js?v=20260305"></script>
+</body>
+
+</html>

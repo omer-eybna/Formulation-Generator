@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="card hero">
+    <h1 class="h1">Top Matches</h1>
+    <p class="sub">Closest 5 products based on your request.</p>
+</section>
+
+<section class="card">
+    <div class="req-summary">
+        <div><b>Odor Type:</b> {{ req.odor_type or "—" }}</div>
+        <div><b>Family:</b> {{ req.family_type or "—" }}</div>
+        <div><b>Intensity:</b> {{ req.intensity_1_10 or "—" }}</div>
+        <div><b>Tags:</b> {{ req.tags or "—" }}</div>
+    </div>
+</section>
+
+<section class="card">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Intensity</th>
+                    <th>Aroma</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results %}
+                <tr>
+                    <td class="name">{{ r.name }}</td>
+                    <td class="desc">{{ r.description or "—" }}</td>
+                    <td><span class="pill">{{ r.intensity or "—" }}</span></td>
+                    <td>
+                        {% if r.aroma %}
+                        <span class="color-dot" style="background: {{ r.aroma }}"></span>
+                        <span class="mono">{{ r.aroma }}</span>
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions">
+        <a class="btn secondary" href="/">← Back</a>
+        <a class="btn primary" href="/">Refine</a>
+    </div>
+</section>
+
+{% endblock %}
