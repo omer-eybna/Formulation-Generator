@@ -4,7 +4,7 @@ import csv
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 LOG_DIR = PROJECT_ROOT / "logs"
@@ -38,15 +38,10 @@ HEADER = [
 def _safe(v: Any) -> str:
     if v is None:
         return ""
-    s = str(v)
-    return "" if s.lower() == "nan" else s
+    return str(v)
 
 
-def log_request(
-    req_payload: Dict[str, Any],
-    top5: List[Dict[str, Any]],
-    request: Optional[Any] = None,
-) -> str:
+def log_request(req_payload: Dict[str, Any], top5: List[Dict[str, Any]], request=None) -> str:
     LOG_DIR.mkdir(parents=True, exist_ok=True)
 
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -63,7 +58,7 @@ def log_request(
         except Exception:
             user_agent = ""
 
-    row: Dict[str, str] = {
+    row = {
         "timestamp_utc": ts,
         "client_ip": client_ip,
         "user_agent": user_agent,
@@ -88,11 +83,10 @@ def log_request(
             row[score_key] = ""
 
     file_exists = LOG_FILE.exists()
-    file_empty = (not file_exists) or (LOG_FILE.stat().st_size == 0)
 
     with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=HEADER)
-        if file_empty:
+        if not file_exists:
             writer.writeheader()
         writer.writerow(row)
         f.flush()

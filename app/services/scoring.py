@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Tuple
+
 import numpy as np
 
 
@@ -8,7 +9,7 @@ def norm_text(s: Any) -> str:
     return str(s).strip().lower()
 
 
-def tokenize(s: str) -> List[str]:
+def tokenize(s: Any) -> List[str]:
     s = norm_text(s).replace("/", " ").replace("|", " ")
     parts: List[str] = []
     for chunk in s.split(","):
@@ -33,8 +34,14 @@ def intensity_similarity(req: float, val: float) -> float:
     return clamp01(1.0 - abs(req - val) / 9.0)
 
 
-def forward_similarity(req_c: float, req_f: float, req_d: float,
-                       c: float, f: float, d: float) -> float:
+def forward_similarity(
+    req_c: float,
+    req_f: float,
+    req_d: float,
+    c: float,
+    f: float,
+    d: float,
+) -> float:
     v1 = np.array([req_c, req_f, req_d], dtype=float)
     v2 = np.array([c, f, d], dtype=float)
     if np.linalg.norm(v1) == 0 or np.linalg.norm(v2) == 0:
@@ -42,42 +49,51 @@ def forward_similarity(req_c: float, req_f: float, req_d: float,
     return float(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
 
 
+def fnum(x: Any, default: float = 0.0) -> float:
+    try:
+        if x is None:
+            return default
+        s = str(x).strip()
+        if s == "":
+            return default
+        if "/" in s:
+            s = s.split("/", 1)[0].strip()
+        return float(s)
+    except Exception:
+        return default
+
+
 def score_row(req: Dict[str, Any], row: Dict[str, Any]) -> Tuple[float, Dict[str, float]]:
     odor_type_req = norm_text(req.get("odor_type"))
     family_req = norm_text(req.get("family_type"))
-    tags_req = tokenize(req.get("tags", ""))
-    desc_req = tokenize(req.get("odor_description", ""))
+    tags_req = tokenize(req.get("tags"))
+    desc_req = tokenize(req.get("odor_description"))
 
     odor_type = norm_text(row.get("odor_type"))
     family = norm_text(row.get("family_type"))
-    tags = tokenize(row.get("tags", ""))
-    desc = tokenize(row.get("odor_description", ""))
+    tags = tokenize(row.get("tags"))
+    desc = tokenize(row.get("odor_description"))
 
-    odor_type_score = 1.0 if odor_type_req and odor_type_req == odor_type else (0.3 if odor_type_req and odor_type_req in odor_type else 0.0)
-    family_score = 1.0 if family_req and family_req == family else (0.3 if family_req and family_req in family else 0.0)
+    odor_type_score = 1.0 if odor_type_req and odor_type_req == odor_type else (
+        0.3 if odor_type_req and odor_type_req in odor_type else 0.0
+    )
+    family_score = 1.0 if family_req and family_req == family else (
+        0.3 if family_req and family_req in family else 0.0
+    )
 
     tags_score = jaccard(tags_req, tags)
     desc_score = jaccard(desc_req, desc)
 
-    # intensity
-    def fnum(x, default=0.0):
-        try:
-            return float(x)
-        except Exception:
-            return float(default)
-
-    inten_req = fnum(req.get("intensity_1_10", 5), 5.0)
-    inten_val = fnum(row.get("intensity_1_10", 5), 5.0)
+    inten_req = fnum(req.get("intensity_1_10"), 5.0)
+    inten_val = fnum(row.get("intensity_1_10"), 5.0)
     inten_score = intensity_similarity(inten_req, inten_val)
 
-    # forwardness (0..10)
-    req_c = fnum(req.get("cannabis_forward", 0))
-    req_f = fnum(req.get("fruity_forward", 0))
-    req_d = fnum(req.get("dessert_forward", 0))
-
-    c = fnum(row.get("cannabis_forward", 0))
-    f = fnum(row.get("fruity_forward", 0))
-    d = fnum(row.get("dessert_forward", 0))
+    req_c = fnum(req.get("cannabis_forward"), 0.0)
+    req_f = fnum(req.get("fruity_forward"), 0.0)
+    req_d = fnum(req.get("dessert_forward"), 0.0)
+    c = fnum(row.get("cannabis_forward"), 0.0)
+    f = fnum(row.get("fruity_forward"), 0.0)
+    d = fnum(row.get("dessert_forward"), 0.0)
 
     forward_score = clamp01((forward_similarity(req_c, req_f, req_d, c, f, d) + 1.0) / 2.0)
 

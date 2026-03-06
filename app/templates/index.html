@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block content %}
 
+{% block content %}
 <section class="card hero">
     <h1 class="h1">Formulation Generator</h1>
     <p class="sub">Search and score formulations with traceable inputs.</p>
@@ -11,22 +11,22 @@
         <div class="grid-2">
             <div class="field">
                 <label>Odor Type</label>
-                <input name="odor_type" type="text" placeholder="e.g., diesel, citrus, pine" />
+                <input name="odor_type" type="text" placeholder="e.g., diesel" />
             </div>
 
             <div class="field">
                 <label>Family Type</label>
-                <input name="family_type" type="text" placeholder="e.g., herbal, fruity" />
+                <input name="family_type" type="text" placeholder="e.g., herbal" />
             </div>
 
             <div class="field">
                 <label>Tags</label>
-                <input name="tags" type="text" placeholder="comma separated (e.g., pine, lemon)" />
+                <input name="tags" type="text" placeholder="e.g., pine, glue" />
             </div>
 
             <div class="field">
                 <label>Odor Description</label>
-                <input name="odor_description" type="text" placeholder="free text" />
+                <input name="odor_description" type="text" placeholder="e.g., sharp herbal glue finish" />
             </div>
 
             <div class="field">
@@ -50,16 +50,10 @@
             </div>
         </div>
 
-        <div class="actions" style="margin-top:14px;">
-            <button class="btn primary" type="submit">✨ Submit</button>
-            <button class="btn secondary" type="reset">Reset</button>
+        <div class="actions" style="margin-top:16px;">
+            <button type="submit" class="btn primary">✨ Submit</button>
+            <button type="reset" class="btn secondary">Reset</button>
         </div>
-
-        <p class="muted" style="margin-top:10px;">
-            Submit sends POST <code>/recommend</code> and logs one row to
-            <code>logs/recommendation_logs.csv</code>.
-        </p>
     </form>
 </section>
-
 {% endblock %}
