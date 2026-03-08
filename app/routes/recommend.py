@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 router = APIRouter()
 
 # n8n test webhook
-N8N_WEBHOOK_URL = "http://localhost:5678/webhook-test/formulation-submitted"
+N8N_WEBHOOK_URL = "http://localhost:5678/webhook/formulation-submitted"
 
 
 def make_json_safe(value):
